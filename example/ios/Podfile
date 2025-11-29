@@ -39,5 +39,35 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    
+    # Replace libsfizz_fat.a with the correct library based on build target
+    if target.name == 'flutter_sequencer'
+      target.build_configurations.each do |config|
+        # Check if building for simulator
+        is_simulator = config.build_settings['PLATFORM_NAME'] == 'iphonesimulator'
+        
+        # Get the actual library path in the Pods directory
+        pod_root = File.expand_path('../../ios', __FILE__)
+        lib_path = File.join(pod_root, 'third_party', 'sfizz', 'build', 'libsfizz_fat.a')
+        
+        if is_simulator
+          # Use simulator library for simulator builds
+          simulator_lib = File.join(pod_root, 'third_party', 'sfizz', 'build', 'libsfizz_simulator.a')
+          
+          if File.exist?(simulator_lib) && File.exist?(lib_path)
+            FileUtils.cp(simulator_lib, lib_path)
+            puts "Replaced libsfizz_fat.a with simulator library for #{config.name}"
+          end
+        else
+          # Use device library for device builds
+          device_lib = File.join(pod_root, 'third_party', 'sfizz', 'build', 'libsfizz_device.a')
+          
+          if File.exist?(device_lib) && File.exist?(lib_path)
+            FileUtils.cp(device_lib, lib_path)
+            puts "Replaced libsfizz_fat.a with device library for #{config.name}"
+          end
+        end
+      end
+    end
   end
 end

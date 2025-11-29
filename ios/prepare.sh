@@ -215,13 +215,43 @@ else
     lipo -create "${fat_args[@]}" -output libsfizz_fat.a
 fi
 
-# For arm64 simulator, we need to replace the arm64 slice in the fat file
-# Extract arm64 from simulator and replace in fat file
-if [ -f "libsfizz_all_iphonesimulator_arm64.a" ] && [ -f "libsfizz_fat.a" ]; then
-    # Extract non-arm64 architectures from fat file
-    lipo libsfizz_fat.a -remove arm64 -output libsfizz_fat_no_arm64.a 2>/dev/null || cp libsfizz_fat.a libsfizz_fat_no_arm64.a
-    # Combine with simulator arm64
-    lipo -create libsfizz_fat_no_arm64.a libsfizz_all_iphonesimulator_arm64.a -output libsfizz_fat.a
-    rm -f libsfizz_fat_no_arm64.a
+# Create separate libraries for device and simulator
+# We cannot have both device arm64 and simulator arm64 in the same fat file
+# So we create:
+# - libsfizz_device.a: device arm64 (for real devices)
+# - libsfizz_simulator.a: simulator x86_64 + arm64 (for simulators)
+# - libsfizz_fat.a: will be set based on build target (handled in Podfile post_install)
+
+# Create device library (arm64 only)
+if [ -f "libsfizz_arm64_device.a" ]; then
+    cp libsfizz_arm64_device.a libsfizz_device.a
+else
+    cp libsfizz_all_iphoneos.a libsfizz_device.a
+fi
+
+# Create simulator library (x86_64 + arm64 simulator)
+simulator_fat_args=()
+if [ -f "libsfizz_all_iphonesimulator_x86_64.a" ]; then
+    simulator_fat_args+=("libsfizz_all_iphonesimulator_x86_64.a")
+fi
+if [ -f "libsfizz_all_iphonesimulator_arm64.a" ]; then
+    simulator_fat_args+=("libsfizz_all_iphonesimulator_arm64.a")
+fi
+
+if [ ${#simulator_fat_args[@]} -eq 0 ]; then
+    echo "Warning: No simulator libraries found"
+elif [ ${#simulator_fat_args[@]} -eq 1 ]; then
+    cp "${simulator_fat_args[0]}" libsfizz_simulator.a
+else
+    lipo -create "${simulator_fat_args[@]}" -output libsfizz_simulator.a
+fi
+
+# Default: use simulator library (for development, simulators are used more often)
+# This will be replaced for device builds in Podfile post_install
+if [ -f "libsfizz_simulator.a" ]; then
+    cp libsfizz_simulator.a libsfizz_fat.a
+else
+    # Fallback: use device library if simulator library doesn't exist
+    cp libsfizz_device.a libsfizz_fat.a
 fi
 

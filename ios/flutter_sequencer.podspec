@@ -47,6 +47,15 @@ A new Flutter plugin project.
   s.library = 'c++'
   s.prepare_command = './prepare.sh'
   s.vendored_libraries = 'third_party/sfizz/build/libsfizz_fat.a'
+  
+  # Add a script phase to dynamically select the correct library based on build target
+  s.script_phases = [
+    {
+      :name => 'Select Correct Library',
+      :script => 'LIB_DIR="${PODS_TARGET_SRCROOT}/third_party/sfizz/build"; FAT_LIB="${LIB_DIR}/libsfizz_fat.a"; DEVICE_LIB="${LIB_DIR}/libsfizz_device.a"; SIMULATOR_LIB="${LIB_DIR}/libsfizz_simulator.a"; if [ "${PLATFORM_NAME}" = "iphonesimulator" ]; then if [ -f "${SIMULATOR_LIB}" ] && [ -f "${FAT_LIB}" ]; then cp "${SIMULATOR_LIB}" "${FAT_LIB}"; echo "Selected simulator library for ${PLATFORM_NAME}"; fi; else if [ -f "${DEVICE_LIB}" ] && [ -f "${FAT_LIB}" ]; then cp "${DEVICE_LIB}" "${FAT_LIB}"; echo "Selected device library for ${PLATFORM_NAME}"; fi; fi',
+      :execution_position => :before_compile
+    }
+  ]
 
   # If your plugin requires a privacy manifest, for example if it uses any
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your

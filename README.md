@@ -1,5 +1,7 @@
 # flutter_sequencer
 
+> 個人的 README 在 [README_jay](./README_jay.md)
+
 This Flutter plugin lets you set up sampler instruments and create multi-track sequences of notes
 that play on those instruments. You can specify a loop range for a sequence and schedule volume
 automations.
