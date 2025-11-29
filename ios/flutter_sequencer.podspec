@@ -33,14 +33,14 @@ A new Flutter plugin project.
 
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64,i386',
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
     'ENABLE_TESTABILITY' => 'YES',
     'STRIP_STYLE' => 'non-global',
     'HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/third_party/sfizz/src $(PODS_TARGET_SRCROOT)/Classes/AudioUnit $(PODS_TARGET_SRCROOT)/Classes'
   }
 
   s.user_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'
+    # 允許 arm64 模擬器以支持 iPhone 16e 等新設備
   }
 
   s.swift_version = '5.0'

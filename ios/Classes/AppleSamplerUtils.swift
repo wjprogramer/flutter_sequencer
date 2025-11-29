@@ -1,4 +1,5 @@
 import AVFoundation
+import Foundation
 
 func isAppleSampler(component: AVAudioUnitComponent) -> Bool {
     let isApple = component.audioComponentDescription.componentManufacturer == kAudioUnitManufacturer_Apple
@@ -11,15 +12,37 @@ func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int
     assert(avAudioUnit.audioComponentDescription.componentSubType == kAudioUnitSubType_MIDISynth)
     
     let audioUnit = avAudioUnit.audioUnit
-    var mutableSoundFontURL = soundFontURL
+    
+    // Convert Swift URL to CFURL for AudioUnitSetProperty
+    // In iOS 26.1, the Swift URL to CFURL bridge may not work correctly
+    // So we create a CFURL directly from the file path using CFURLCreateWithFileSystemPath
+    let filePath = soundFontURL.path as CFString
+    let cfURL = CFURLCreateWithFileSystemPath(
+        kCFAllocatorDefault,
+        filePath,
+        CFURLPathStyle.cfurlposixPathStyle,
+        false
+    )
+    
+    guard let cfURL = cfURL else {
+        assertionFailure("Failed to create CFURL from path: \(soundFontURL.path)")
+        return
+    }
     
     // Load SoundFont
+    // AudioUnitSetProperty expects a pointer to CFURL
+    var cfURLPtr: UnsafeMutablePointer<CFURL?> = UnsafeMutablePointer.allocate(capacity: 1)
+    cfURLPtr.pointee = cfURL
+    
     var result = AudioUnitSetProperty(audioUnit,
-                                 AudioUnitPropertyID(kMusicDeviceProperty_SoundBankURL),
-                                 AudioUnitScope(kAudioUnitScope_Global),
-                                 0,
-                                 &mutableSoundFontURL,
-                                 UInt32(MemoryLayout.size(ofValue: mutableSoundFontURL)))
+                                     AudioUnitPropertyID(kMusicDeviceProperty_SoundBankURL),
+                                     AudioUnitScope(kAudioUnitScope_Global),
+                                     0,
+                                     cfURLPtr,
+                                     UInt32(MemoryLayout<CFURL?>.size))
+    
+    cfURLPtr.deallocate()
+    
     assert(result == noErr, "SoundFont could not be loaded")
 
     var enabled = UInt32(1)

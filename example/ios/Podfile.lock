@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_sequencer: fbbf1e694ffab964602388ae11cf202b5f5b9a8c
+  flutter_sequencer: 140ef7bc6f3a7759044194fb5ceb55bb6635f3ce
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
 
 PODFILE CHECKSUM: 251cb053df7158f337c0712f2ab29f4e0fa474ce
