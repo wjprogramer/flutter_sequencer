@@ -1,4 +1,5 @@
 /// Learn more about the SFZ format here: <https://sfzformat.com/headers/>
+library;
 
 String opcodeMapToString(Map<String, String>? opcodeMap) {
   if (opcodeMap == null) {
@@ -14,10 +15,10 @@ class SfzRegion {
   SfzRegion({
     this.sample,
     this.key,
-    this.lokey,
-    this.hikey,
-    this.lovel,
-    this.hivel,
+    this.loKey,
+    this.hiKey,
+    this.loVel,
+    this.hiVel,
     this.loopStart,
     this.loopEnd,
     this.otherOpcodes,
@@ -25,90 +26,86 @@ class SfzRegion {
 
   String? sample;
   int? key;
-  int? lokey, hikey;
-  int? lovel, hivel;
+  int? loKey, hiKey;
+  int? loVel, hiVel;
   double? loopStart, loopEnd;
   Map<String, String>? otherOpcodes;
 
   String buildString() {
-    return '<region>\n' +
-        (sample != null ? 'sample=$sample\n' : '') +
-        (key != null ? 'key=$key\n' : '') +
-        (lokey != null ? 'lokey=$lokey\n' : '') +
-        (hikey != null ? 'hikey=$hikey\n' : '') +
-        (lovel != null ? 'lovel=$lovel\n' : '') +
-        (hivel != null ? 'hivel=$hivel\n' : '') +
-        (loopStart != null ? 'loop_start=$loopStart\n' : '') +
-        (loopEnd != null ? 'loop_end=$loopEnd\n' : '') +
-        (opcodeMapToString(otherOpcodes));
+    // cSpell:disable
+    return '<region>\n'
+        '${sample != null ? 'sample=$sample\n' : ''}'
+        '${key != null ? 'key=$key\n' : ''}'
+        '${loKey != null ? 'lokey=$loKey\n' : ''}'
+        '${hiKey != null ? 'hikey=$hiKey\n' : ''}'
+        '${loVel != null ? 'lovel=$loVel\n' : ''}'
+        '${hiVel != null ? 'hivel=$hiVel\n' : ''}'
+        '${loopStart != null ? 'loop_start=$loopStart\n' : ''}'
+        '${loopEnd != null ? 'loop_end=$loopEnd\n' : ''}'
+        '${opcodeMapToString(otherOpcodes)}';
+    // cSpell:enable
   }
 }
 
 class SfzGroup {
-  SfzGroup({
-    this.opcodes,
-    required this.regions,
-  });
+  SfzGroup({this.opcodes, required this.regions});
 
   Map<String, String>? opcodes;
   List<SfzRegion> regions;
 
   String buildString() {
-    return '<group>\n' +
-        (opcodeMapToString(opcodes)) +
-        regions.map((r) => r.buildString()).join('');
+    return '<group>\n'
+        '${opcodeMapToString(opcodes)}'
+        '${regions.map((r) => r.buildString()).join('')}';
   }
 }
 
 class SfzControl {
-  SfzControl({
-    this.opcodes,
-  });
+  SfzControl({this.opcodes});
 
   Map<String, String>? opcodes;
 
   String buildString() {
-    return '<control>\n' + (opcodeMapToString(opcodes));
+    return '<control>\n'
+        '${opcodeMapToString(opcodes)}'
+        '';
   }
 }
 
 class SfzGlobal {
-  SfzGlobal({
-    this.opcodes,
-  });
+  SfzGlobal({this.opcodes});
 
   Map<String, String>? opcodes;
 
   String buildString() {
-    return '<global>\n' + (opcodeMapToString(opcodes));
+    return '<global>\n'
+        '${opcodeMapToString(opcodes)}';
   }
 }
 
 class SfzEffect {
-  SfzEffect({
-    this.opcodes,
-  });
+  SfzEffect({this.opcodes});
 
   Map<String, String>? opcodes;
 
   String buildString() {
-    return '<effect>\n' + (opcodeMapToString(opcodes));
+    return '<effect>\n'
+        '${opcodeMapToString(opcodes)}';
   }
 }
 
 class SfzCurve {
-  SfzCurve({
-    this.opcodes,
-  });
+  SfzCurve({this.opcodes});
 
   Map<String, String>? opcodes;
 
   String buildString() {
-    return '<curve>\n' + (opcodeMapToString(opcodes));
+    return '<curve>\n'
+        '${opcodeMapToString(opcodes)}';
   }
 }
 
-/// Used to build an SFZ. Note that if lokey or hikey are not set on a given
+/// Used to build an SFZ. Note that if loKey or hiKey are not set on a given
 /// region, they will be set automatically.
 class Sfz {
   final List<SfzGroup> groups;
@@ -126,29 +123,32 @@ class Sfz {
   });
 
   void _setNoteRanges() {
-    final allRegions = [];
+    final allRegions = <SfzRegion>[];
 
-    groups.forEach((g) => allRegions.addAll(g.regions));
+    for (var g in groups) {
+      allRegions.addAll(g.regions);
+    }
 
-    allRegions.sort((a, b) => a.key - b.key);
+    allRegions.sort((a, b) => (a.key! - b.key!).toInt());
     allRegions.asMap().forEach((index, sd) {
       final prevSd = index > 0 ? allRegions[index - 1] : null;
-      final nextSd =
-          index < allRegions.length - 1 ? allRegions[index + 1] : null;
+      final nextSd = index < allRegions.length - 1
+          ? allRegions[index + 1]
+          : null;
 
-      if (sd.lokey == null) {
+      if (sd.loKey == null) {
         if (prevSd == null) {
-          sd.lokey = 0;
+          sd.loKey = 0;
         } else {
-          sd.lokey = ((sd.key + prevSd.key) / 2).floor() + 1;
+          sd.loKey = ((sd.key! + prevSd.key!) / 2).floor() + 1;
         }
       }
 
-      if (sd.hikey == null) {
+      if (sd.hiKey == null) {
         if (nextSd == null) {
-          sd.hikey = 127;
+          sd.hiKey = 127;
         } else {
-          sd.hikey = ((nextSd.key + sd.key) / 2).floor();
+          sd.hiKey = ((nextSd.key! + sd.key!) / 2).floor();
         }
       }
     });

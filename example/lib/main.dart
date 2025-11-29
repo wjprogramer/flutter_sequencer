@@ -24,7 +24,7 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       SfzInstrument(
         path: "assets/sfz/GMPiano.sfz",
         isAsset: true,
-        tuningPath: "assets/sfz/meanquar.scl",
+        tuningPath: "assets/sfz/meanquar.scl", // cSpell:disable-line
       ),
       RuntimeSfzInstrument(
         id: "Sampled Synth",
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               regions: [
                 SfzRegion(sample: "D3.wav", key: 62),
                 SfzRegion(sample: "F3.wav", key: 65),
-                SfzRegion(sample: "Gsharp3.wav", key: 68),
+                SfzRegion(sample: "Gsharp3.wav", key: 68), // cSpell:disable-line
               ],
             ),
           ],

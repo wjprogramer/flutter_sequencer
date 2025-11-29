@@ -8,7 +8,7 @@ class TempoSelector extends StatefulWidget {
   final Function(double nextTempo) handleChange;
 
   @override
-  _TempoSelectorState createState() => _TempoSelectorState();
+  State<TempoSelector> createState() => _TempoSelectorState();
 }
 
 class _TempoSelectorState extends State<TempoSelector> {

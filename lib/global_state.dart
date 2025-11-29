@@ -73,7 +73,7 @@ class GlobalState {
   }
 
   /// {@macro flutter_sequencer_library_private}
-  /// Unregisters the sequence with the underlying engine.
+  /// UnRegisters the sequence with the underlying engine.
   void unregisterSequence(Sequence sequence) {
     sequenceIdMap.remove(sequence.id);
   }
@@ -133,7 +133,9 @@ class GlobalState {
   Future<void> setupEngine() async {
     sampleRate = await NativeBridge.doSetup();
     isEngineReady = true;
-    onEngineReadyCallbacks.forEach((callback) => callback());
+    for (var callback in onEngineReadyCallbacks) {
+      callback();
+    }
 
     if (keepEngineRunning) {
       NativeBridge.play();
@@ -166,7 +168,9 @@ class GlobalState {
 
     _topOffTimer = Timer.periodic(Duration(milliseconds: 250), (_) {  // More frequent buffer updates
       _topOffAllBuffers();
-      sequenceIdMap.values.forEach((sequence) => sequence.checkIsOver());
+      for (var sequence in sequenceIdMap.values) {
+        sequence.checkIsOver();
+      }
     });
   }
 

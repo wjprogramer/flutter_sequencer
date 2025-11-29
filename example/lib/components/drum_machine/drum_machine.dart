@@ -32,7 +32,7 @@ class DrumMachineWidget extends StatefulWidget {
   final Function(int, int, int, double) handleVelocitiesChange;
 
   @override
-  _DrumMachineWidgetState createState() => _DrumMachineWidgetState();
+  State<DrumMachineWidget> createState() => _DrumMachineWidgetState();
 }
 
 class _DrumMachineWidgetState extends State<DrumMachineWidget>
