@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 class TempoSelector extends StatefulWidget {
-  TempoSelector({required this.selectedTempo, required this.handleChange});
+  const TempoSelector({super.key, required this.selectedTempo, required this.handleChange});
 
   final double selectedTempo;
   final Function(double nextTempo) handleChange;
@@ -51,8 +50,8 @@ class _TempoSelectorState extends State<TempoSelector> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(child: Text('Tempo:'), margin: EdgeInsets.only(right: 16.0)),
-        Container(
+        Container(margin: EdgeInsets.only(right: 16.0), child: Text('Tempo:')),
+        SizedBox(
           width: 50,
           height: 50,
           child: TextField(

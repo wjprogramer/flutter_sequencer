@@ -9,7 +9,7 @@ import 'grid/grid.dart';
 
 class DrumMachineWidget extends StatefulWidget {
   const DrumMachineWidget({
-    Key? key,
+    super.key,
     required this.track,
     required this.stepCount,
     required this.currentStep,
@@ -19,7 +19,7 @@ class DrumMachineWidget extends StatefulWidget {
     required this.stepSequencerState,
     required this.handleVolumeChange,
     required this.handleVelocitiesChange,
-  }) : super(key: key);
+  });
 
   final Track track;
   final int stepCount;
@@ -39,10 +39,6 @@ class _DrumMachineWidgetState extends State<DrumMachineWidget>
     with SingleTickerProviderStateMixin {
   Ticker? ticker;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   double? getVelocity(int step, int col) {
     return widget.stepSequencerState!.getVelocity(

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class StepCountSelector extends StatelessWidget {
   const StepCountSelector({
-    Key? key,
+    super.key,
     required this.stepCount,
     required this.onChange,
-  }) : super(key: key);
+  });
 
   final int stepCount;
   final Function(int) onChange;

@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'cell.dart';
 
 class Grid extends StatelessWidget {
-  Grid({
-    Key? key,
+  const Grid({
+    super.key,
     required this.getVelocity,
     required this.columnLabels,
     required this.stepCount,
@@ -15,7 +15,7 @@ class Grid extends StatelessWidget {
     required this.onChange,
     required this.onNoteOn,
     required this.onNoteOff,
-  }) : super(key: key);
+  });
 
   final Function(int step, int col) getVelocity;
   final List<String> columnLabels;

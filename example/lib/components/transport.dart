@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Transport extends StatelessWidget {
   const Transport({
-    Key? key,
+    super.key,
     required this.isPlaying,
     required this.isLooping,
     required this.onTogglePlayPause,
     required this.onStop,
     required this.onToggleLoop,
-  }) : super(key: key);
+  });
 
   final bool isPlaying;
   final bool isLooping;

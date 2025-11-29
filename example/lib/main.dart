@@ -21,6 +21,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -97,25 +99,25 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
     sequence.createTracks(instruments).then((tracks) {
       this.tracks = tracks;
-      tracks.forEach((track) {
+      for (var track in tracks) {
         trackVolumes[track.id] = 0.0;
         trackStepSequencerStates[track.id] = StepSequencerState();
-      });
+      }
 
       setState(() {
-        this.selectedTrack = tracks[0];
+        selectedTrack = tracks[0];
       });
     });
 
-    ticker = this.createTicker((Duration elapsed) {
+    ticker = createTicker((Duration elapsed) {
       setState(() {
         tempo = sequence.getTempo();
         position = sequence.getBeat();
         isPlaying = sequence.getIsPlaying();
 
-        tracks.forEach((track) {
+        for (var track in tracks) {
           trackVolumes[track.id] = track.getVolume();
-        });
+        }
       });
     });
     ticker.start();
@@ -164,7 +166,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
     setState(() {
       stepCount = nextStepCount;
-      tracks.forEach((track) => syncTrack(track));
+      for (var track in tracks) {
+        syncTrack(track);
+      }
     });
   }
 
@@ -282,10 +286,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              MaterialButton(child: Text('Reset'), onPressed: handleReset),
+              MaterialButton(onPressed: handleReset, child: Text('Reset')),
               MaterialButton(
-                child: Text('Load Demo'),
                 onPressed: handleLoadDemo,
+                child: Text('Load Demo'),
               ),
             ],
           ),

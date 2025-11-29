@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class PositionView extends StatelessWidget {
-  PositionView({required this.position});
+  const PositionView({super.key, required this.position});
 
   final double position;
 

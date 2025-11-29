@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class VolumeSlider extends StatelessWidget {
-  VolumeSlider({Key? key, required this.value, required this.onChange});
+  const VolumeSlider({super.key, required this.value, required this.onChange});
 
   final double value;
   final Function(double) onChange;
