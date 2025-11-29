@@ -1,12 +1,47 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
 .DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.flutter-plugins-dependencies
+/build/
+/coverage/
+
+# FVM Version Cache
+.fvm/
+
+### 以下來自舊的
+
 .dart_tool/
 .idea/
 
 .packages
 .pub/
-
-build/
-
 cpp_test/googletest/
 cpp_test/lib/
 
@@ -20,6 +55,3 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
-
-# FVM Version Cache
-.fvm/
