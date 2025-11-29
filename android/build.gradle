@@ -1,31 +1,55 @@
 import org.eclipse.jgit.api.Git
 
-group 'com.michaeljperri.flutter_sequencer'
-version '1.0-SNAPSHOT'
+group = "com.michaeljperri.flutter_sequencer"
+version = "1.0-SNAPSHOT"
 
 buildscript {
-    ext.kotlin_version = '1.9.24'
-    repositories { google(); mavenCentral() }
+    ext.kotlin_version = "2.1.0"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.eclipse.jgit:org.eclipse.jgit:6.9.0.202403050737-r"
+        classpath("com.android.tools.build:gradle:8.9.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.9.0.202403050737-r")
     }
 }
 
-rootProject.allprojects {
-    repositories { google(); mavenCentral() }
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
 
 android {
     namespace = "com.michaeljperri.flutter_sequencer"
-    compileSdkVersion 35
+
+    compileSdk = 36
+
+    compileOptions {
+        // 原本套件用 JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        // 原本套件用 JavaVersion.VERSION_17
+        jvmTarget = JavaVersion.VERSION_11
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
 
     defaultConfig {
-        minSdkVersion 24
+        minSdk = 24
         externalNativeBuild {
             cmake {
                 cppFlags '-std=c++17', '-frelaxed-template-template-args'
@@ -37,19 +61,30 @@ android {
         disable 'InvalidPackage'
     }
 
-    ndkVersion "28.0.12674087"
+    // ndkVersion "28.0.12674087" // 原本套件用的
     externalNativeBuild {
         cmake {
-            // version "3.22.1"
+            // version "3.22.1" // 原本套件就已經"註解掉"了這行
             path "CMakeLists.txt"
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+    dependencies {
+        testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation("org.mockito:mockito-core:5.0.0")
     }
-    kotlinOptions { jvmTarget = '17' }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+
+            testLogging {
+               events "passed", "skipped", "failed", "standardOut", "standardError"
+               outputs.upToDateWhen {false}
+               showStandardStreams = true
+            }
+        }
+    }
 }
 
 tasks.register('cloneThirdPartyRepos') {
@@ -76,8 +111,4 @@ void cloneThirdPartyRepo(String name, String uri, String commit) {
         repo.submoduleUpdate()
         repo.submoduleInit()
     }
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -39,19 +39,19 @@ final nAddTrackSfzString = nativeLib.lookupFunction<
         int)>('add_track_sfz_string');
 
 final nRemoveTrack = nativeLib
-    .lookupFunction<Void Function(Int32), void Function(int?)>('remove_track');
+    .lookupFunction<Void Function(Int32), void Function(int)>('remove_track');
 
 final nStopAllNotes = nativeLib
     .lookupFunction<Void Function(), void Function()>('stop_all_notes');
 
 final nResetTrack = nativeLib
-    .lookupFunction<Void Function(Int32), void Function(int?)>('reset_track');
+    .lookupFunction<Void Function(Int32), void Function(int)>('reset_track');
 
 final nGetPosition =
     nativeLib.lookupFunction<Uint32 Function(), int Function()>('get_position');
 
 final nGetTrackVolume =
-    nativeLib.lookupFunction<Float Function(Int32), double Function(int?)>(
+    nativeLib.lookupFunction<Float Function(Int32), double Function(int)>(
         'get_track_volume');
 
 final nGetLastRenderTimeUs =
@@ -59,19 +59,19 @@ final nGetLastRenderTimeUs =
         'get_last_render_time_us');
 
 final nGetBufferAvailableCount =
-    nativeLib.lookupFunction<Uint32 Function(Int32), int Function(int?)>(
+    nativeLib.lookupFunction<Uint32 Function(Int32), int Function(int)>(
         'get_buffer_available_count');
 
 final nHandleEventsNow = nativeLib.lookupFunction<
-    Uint32 Function(Int32?, Pointer<Uint8>?, Uint32),
-    int Function(int?, Pointer<Uint8>?, int)>('handle_events_now');
+    Uint32 Function(Int32, Pointer<Uint8>?, Uint32),
+    int Function(int, Pointer<Uint8>?, int)>('handle_events_now');
 
 final nScheduleEvents = nativeLib.lookupFunction<
-    Uint32 Function(Int32?, Pointer<Uint8>?, Uint32),
-    int Function(int?, Pointer<Uint8>?, int)>('schedule_events');
+    Uint32 Function(Int32, Pointer<Uint8>?, Uint32),
+    int Function(int, Pointer<Uint8>?, int)>('schedule_events');
 
 final nClearEvents = nativeLib.lookupFunction<Void Function(Int32, Uint32),
-    void Function(int?, int?)>('clear_events');
+    void Function(int, int)>('clear_events');
 
 final nPlay =
     nativeLib.lookupFunction<Void Function(), void Function()>('engine_play');

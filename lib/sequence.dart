@@ -57,19 +57,13 @@ class Sequence {
 
   /// Creates tracks in the underlying sequencer engine.
   Future<List<Track>> createTracks(List<Instrument> instruments) async {
-    if (globalState.isEngineReady) {
-      return _createTracks(instruments);
-    } else {
-      final completer = Completer<List<Track>>.sync();
-
-      globalState.onEngineReady(() async {
-        final tracks = await _createTracks(instruments);
-
-        completer.complete(tracks);
-      });
-
-      return completer.future;
+    if (!globalState.isEngineReady) {
+      // Setup engine first if not already done
+      await globalState.setupEngine();
     }
+    
+    // Now engine is ready, create tracks
+    return _createTracks(instruments);
   }
 
   /// Removes a track from the underlying sequencer engine.

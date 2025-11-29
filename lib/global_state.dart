@@ -149,6 +149,14 @@ class GlobalState {
   }
 
   void _playEngine() {
+    if (!isEngineReady) {
+      // Engine not ready yet, wait for it to be ready
+      onEngineReady(() {
+        _playEngine();
+      });
+      return;
+    }
+
     NativeBridge.pause();  // Stop first
     Future.delayed(Duration(milliseconds: 50), () {  // Faster restart
       NativeBridge.play();  // Start engine again
@@ -163,6 +171,13 @@ class GlobalState {
   }
 
   void _pauseEngine() {
+    if (!isEngineReady) {
+      // Engine not ready yet, just cancel timer
+      _topOffTimer?.cancel();
+      _topOffTimer = null;
+      return;
+    }
+
     if (!keepEngineRunning && !isPlaying()) {
       print("⏸️ Pausing Engine...");
       NativeBridge.pause();

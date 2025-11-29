@@ -1,16 +1,14 @@
 package com.michaeljperri.flutter_sequencer
 
 import android.content.Context
-import android.content.res.AssetManager;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat
+import android.content.res.AssetManager
+import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -27,7 +25,7 @@ public class FlutterSequencerPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var channel : MethodChannel
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_sequencer")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_sequencer")
     channel.setMethodCallHandler(this);
     context = flutterPluginBinding.applicationContext
   }
@@ -43,13 +41,6 @@ public class FlutterSequencerPlugin: FlutterPlugin, MethodCallHandler {
   // in the same class.
   companion object {
     private lateinit var context : Context
-
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "flutter_sequencer")
-      channel.setMethodCallHandler(FlutterSequencerPlugin())
-      context = registrar.context()
-    }
 
     init {
       System.loadLibrary("flutter_sequencer")
@@ -128,3 +119,4 @@ public class FlutterSequencerPlugin: FlutterPlugin, MethodCallHandler {
 
   private external fun setupAssetManager(assetManager: AssetManager)
 }
+
