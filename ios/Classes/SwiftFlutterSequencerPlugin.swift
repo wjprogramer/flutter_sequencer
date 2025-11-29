@@ -14,7 +14,7 @@ public class SwiftFlutterSequencerPlugin: NSObject, FlutterPlugin {
     public var registrar: FlutterPluginRegistrar!
     public var engine: CocoaEngine?
     
-    public static func register(with registrar: FlutterPluginRegistrar) {
+    @objc public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_sequencer", binaryMessenger: registrar.messenger())
         plugin = SwiftFlutterSequencerPlugin()
         plugin.registrar = registrar
@@ -168,3 +168,4 @@ func enginePlay() {
 func enginePause() {
     plugin.engine!.pause()
 }
+

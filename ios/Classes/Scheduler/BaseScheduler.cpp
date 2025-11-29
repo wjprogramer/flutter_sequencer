@@ -2,10 +2,17 @@
 
 #include <limits>
 #include "SchedulerEvent.h"
-#include <android/log.h>
 
+#ifdef __ANDROID__
+#include <android/log.h>
 #define LOG_TAG "flutter_sequencer"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+#else
+// iOS/macOS logging
+#include <cstdio>
+#define LOG_TAG "flutter_sequencer"
+#define LOGI(...) printf("[%s] ", LOG_TAG); printf(__VA_ARGS__)
+#endif
 
 track_index_t BaseScheduler::addTrack() {
     static track_index_t nextTrackIndex = 0;
@@ -76,7 +83,7 @@ void BaseScheduler::resetTrack(track_index_t trackIndex) {
         events[noteNumber].data[2] = 0;
     }
 
-    handleEventsNow(trackIndex, std::as_const(events), 128);
+    handleEventsNow(trackIndex, events, 128);
 
     // FORCE RENDER of the note-off events NOW
     handleRenderAudioRange(trackIndex, 0, 0); // Render 0 frames, triggers flush

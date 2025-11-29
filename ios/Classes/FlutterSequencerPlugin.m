@@ -19,3 +19,4 @@
   [SwiftFlutterSequencerPlugin registerWithRegistrar:registrar];
 }
 @end
+

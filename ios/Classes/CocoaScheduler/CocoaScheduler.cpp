@@ -188,3 +188,4 @@ UInt64 SchedulerGetLastRenderTimeUs(const void* scheduler) {
 Float32 SchedulerGetTrackVolume(const void* scheduler, track_index_t trackIndex) {
     return ((CocoaScheduler*)scheduler)->getTrackVolume(trackIndex);
 }
+

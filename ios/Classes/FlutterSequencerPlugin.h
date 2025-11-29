@@ -2,3 +2,4 @@
 
 @interface FlutterSequencerPlugin : NSObject<FlutterPlugin>
 @end
+

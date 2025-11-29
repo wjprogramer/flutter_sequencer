@@ -1,5 +1,23 @@
 #!/bin/zsh
 
+set -e
+
+# Ensure Homebrew paths are in PATH (needed when running from CocoaPods)
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+# Check if the library already exists
+if [ -f "third_party/sfizz/build/libsfizz_fat.a" ]; then
+    echo "libsfizz_fat.a already exists, skipping build"
+    exit 0
+fi
+
+# Check if cmake is installed
+if ! command -v cmake &> /dev/null; then
+    echo "Error: cmake is not installed. Please install cmake first:"
+    echo "  brew install cmake"
+    exit 1
+fi
+
 if [ ! -d third_party ]; then
     mkdir third_party
 fi
@@ -31,6 +49,8 @@ cd build
 # Generate XCode project for Sfizz
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_CXX_STANDARD=17 \
+    -DDEPLOYMENT_TARGET=13.0 \
     -DSFIZZ_JACK=OFF \
     -DSFIZZ_RENDER=OFF \
     -DSFIZZ_LV2=OFF \
@@ -50,11 +70,18 @@ cmake \
 xcodebuild -project sfizz.xcodeproj -scheme ALL_BUILD -xcconfig ../../../overrides.xcconfig -configuration Release -destination "generic/platform=iOS" -destination "generic/platform=iOS Simulator"
 
 # Create fat libraries
-deviceLibs=(**/Release-iphoneos/*.a);
-simulatorLibs=(**/Release-iphonesimulator/*.a);
+# Use find instead of glob to avoid zsh glob issues
+deviceLibs=($(find . -path "*/Release-iphoneos/*.a" -type f))
+simulatorLibs=($(find . -path "*/Release-iphonesimulator/*.a" -type f))
 
-libtool -static -o libsfizz_all_iphoneos.a $deviceLibs
-libtool -static -o libsfizz_all_iphonesimulator.a $simulatorLibs
+if [ ${#deviceLibs[@]} -eq 0 ] || [ ${#simulatorLibs[@]} -eq 0 ]; then
+    echo "Error: Could not find built libraries"
+    exit 1
+fi
+
+libtool -static -o libsfizz_all_iphoneos.a "${deviceLibs[@]}"
+libtool -static -o libsfizz_all_iphonesimulator.a "${simulatorLibs[@]}"
 lipo \
     -create libsfizz_all_iphoneos.a libsfizz_all_iphonesimulator.a \
     -output libsfizz_fat.a
+

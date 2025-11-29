@@ -1,5 +1,5 @@
 /*
-See LICENSE folder for this sample’s licensing information.
+See LICENSE folder for this sample's licensing information.
 
 Abstract:
 An AUAudioUnit subclass implementing a low-pass filter with resonance.
@@ -114,3 +114,4 @@ public class SfizzAU: AUAudioUnit {
                                      version: UInt32.max)
     }
 }
+

@@ -54,3 +54,4 @@ func loadSoundFont(avAudioUnit: AVAudioUnit, soundFontURL: URL, presetIndex: Int
     result = MusicDeviceMIDIEvent(audioUnit, pcCommand, patch1, 0, 0)
     assert(result == noErr, "Patch could not be changed")
 }
+

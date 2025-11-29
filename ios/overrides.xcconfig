@@ -1,1 +1,4 @@
 CLANG_X86_VECTOR_INSTRUCTIONS=avx
+CLANG_CXX_LANGUAGE_STANDARD=c++17
+WARNING_CFLAGS = -Wno-error=missing-template-arg-list-after-template-kw
+

@@ -66,3 +66,4 @@ Float32 SchedulerGetTrackVolume(const void* _Nonnull engine, track_index_t track
 #endif
 
 #endif /* CocoaScheduler_h */
+
