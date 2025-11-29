@@ -17,7 +17,8 @@ class StepSequencerState {
   }
 
   void iterateEvents(
-      Function(int step, int noteNumber, double velocity) callback) {
+    Function(int step, int noteNumber, double velocity) callback,
+  ) {
     stepNoteNumberVelocityMap.forEach((step, noteNumberVelocityMap) {
       noteNumberVelocityMap.forEach((noteNumber, velocity) {
         if (velocity > 0) {

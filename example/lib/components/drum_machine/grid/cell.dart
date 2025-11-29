@@ -22,17 +22,22 @@ class Cell extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Color.lerp(isCurrentStep ? Colors.white30 : Colors.black,
-            isCurrentStep ? Colors.blue : Colors.pink, velocity),
+        color: Color.lerp(
+          isCurrentStep ? Colors.white30 : Colors.black,
+          isCurrentStep ? Colors.blue : Colors.pink,
+          velocity,
+        ),
         border: Border.all(color: Colors.white70),
       ),
       child: Transform(
-          transform:
-              Matrix4.translationValues(0, (-1 * size * velocity) + 2, 0),
-          child: Container(
-              width: size,
-              decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: Colors.white))))),
+        transform: Matrix4.translationValues(0, (-1 * size * velocity) + 2, 0),
+        child: Container(
+          width: size,
+          decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.white)),
+          ),
+        ),
+      ),
     );
 
     return GestureDetector(
