@@ -34,7 +34,7 @@ class Transport extends StatelessWidget {
         IconButton(
           icon: Icon(Icons.repeat),
           onPressed: onToggleLoop,
-          color: isLooping ? Colors.pink : Colors.black54,
+          color: isLooping ? Colors.pink : Colors.white24,
         ),
       ],
     );
