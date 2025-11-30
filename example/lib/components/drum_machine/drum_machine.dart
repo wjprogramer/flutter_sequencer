@@ -39,7 +39,6 @@ class _DrumMachineWidgetState extends State<DrumMachineWidget>
     with SingleTickerProviderStateMixin {
   Ticker? ticker;
 
-
   double? getVelocity(int step, int col) {
     return widget.stepSequencerState!.getVelocity(
       step,
