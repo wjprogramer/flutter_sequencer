@@ -36,7 +36,10 @@ A new Flutter plugin project.
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
     'ENABLE_TESTABILITY' => 'YES',
     'STRIP_STYLE' => 'non-global',
-    'HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/third_party/sfizz/src $(PODS_TARGET_SRCROOT)/Classes/AudioUnit $(PODS_TARGET_SRCROOT)/Classes'
+    'HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/third_party/sfizz/src $(PODS_TARGET_SRCROOT)/Classes/AudioUnit $(PODS_TARGET_SRCROOT)/Classes',
+    # 確保 FFI 符號在 Archive 構建時不被剝離
+    # 導出所有從 Dart 端動態查找的 C 函數符號
+    'OTHER_LDFLAGS' => '-Wl,-exported_symbol,_RegisterDart_PostCObject -Wl,-exported_symbol,_setup_engine -Wl,-exported_symbol,_destroy_engine -Wl,-exported_symbol,_add_track_sf2 -Wl,-exported_symbol,_add_track_sfz -Wl,-exported_symbol,_add_track_sfz_string -Wl,-exported_symbol,_remove_track -Wl,-exported_symbol,_stop_all_notes -Wl,-exported_symbol,_reset_track -Wl,-exported_symbol,_get_position -Wl,-exported_symbol,_get_track_volume -Wl,-exported_symbol,_get_last_render_time_us -Wl,-exported_symbol,_get_buffer_available_count -Wl,-exported_symbol,_handle_events_now -Wl,-exported_symbol,_schedule_events -Wl,-exported_symbol,_clear_events -Wl,-exported_symbol,_engine_play -Wl,-exported_symbol,_engine_pause'
   }
 
   s.user_target_xcconfig = {
